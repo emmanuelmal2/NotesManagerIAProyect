@@ -1,0 +1,16 @@
+.dashboard{ }
+.dashboard-header{ display:flex; justify-content:flex-end; margin-bottom: var(--space-4) }
+
+.note{
+  padding: var(--space-4); margin-bottom: var(--space-3);
+}
+.note-header{ display:flex; justify-content:space-between; gap: var(--space-3) }
+.note-title{ margin:0; font-size:1.1rem }
+.note-date{ margin:0; color: var(--muted); font-size:.9rem }
+.note-body{ margin-top:.5rem; line-height:1.6 }
+.note-footer{ margin-top: var(--space-3); display:flex; gap:.5rem }
+
+.empty{
+  border:1px dashed var(--border); padding: var(--space-6);
+  border-radius: var(--radius); text-align:center; color: var(--muted);
+}

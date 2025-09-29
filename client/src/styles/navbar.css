@@ -1,0 +1,10 @@
+.navbar{
+  position:sticky; top:0; z-index:50; background: rgba(11,15,20,.8); backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.navbar-inner{
+  max-width: 960px; margin: 0 auto; padding: .75rem var(--space-3);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--space-3);
+}
+.brand{ font-weight:600; letter-spacing:.3px }
+.nav-actions{ display:flex; align-items:center; gap:.5rem }

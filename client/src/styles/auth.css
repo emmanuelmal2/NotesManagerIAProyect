@@ -1,0 +1,7 @@
+.auth-wrap{ min-height:100vh; display:grid; place-items:center; padding:var(--space-6); background:var(--bg); }
+.auth-card{ width:100%; max-width:480px; padding:var(--space-6); background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); }
+.auth-title{ margin:0 0 var(--space-4); font-size:1.6rem; text-align:center; }
+.auth-actions{ display:flex; justify-content:space-between; align-items:center; gap:var(--space-3); margin-top:var(--space-4); flex-wrap: wrap; }
+
+.link{ color: var(--brand) }
+.link:hover{ text-decoration: underline }
