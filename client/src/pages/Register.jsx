@@ -5,7 +5,7 @@ import "../styles/auth.css"
 import "../styles/components.css"
 import "../styles/layout.css"
 
-axios.defaults.baseURL = "http://localhost:5000/api"
+axios.defaults.baseURL = import.meta.env.VITE_API_URL + "/api"
 
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" })

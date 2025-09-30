@@ -6,8 +6,7 @@ import "../styles/noteform.css"
 import "../styles/layout.css"
 import "../styles/components.css"
 
-axios.defaults.baseURL = "http://localhost:5000/api";
-
+axios.defaults.baseURL = import.meta.env.VITE_API_URL + "/api"
 function CreateNote() {
   const [note, setNote] = useState({ title: "", content: "" });
   const [error, setError] = useState(null);
