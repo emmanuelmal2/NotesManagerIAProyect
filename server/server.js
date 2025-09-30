@@ -10,20 +10,35 @@ dotenv.config();
 const mongo_url = process.env.MONGO_URL;
 const port = process.env.PORT || 5000;
 
-await mongoose.connect(mongo_url);
+// Conexión Mongo con logs de error
+try {
+  await mongoose.connect(mongo_url);
+  console.log("Mongo conectado");
+} catch (e) {
+  console.error("Error conectando a Mongo:", e.message);
+}
 
 const app = express();
-
 app.use(express.json());
 
+
+// Lista blanca de orígenes (prod + dev)
+const whitelist = [
+  "http://localhost:5173",
+  "https://TU-APP.vercel.app" 
+].filter(Boolean);
+
+// CORS seguro con whitelist (acepta requests sin origin como Postman)
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin(origin, cb) {
+    if (!origin || whitelist.includes(origin)) return cb(null, true);
+    return cb(new Error("Not allowed by CORS: " + origin));
+  },
   methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
   allowedHeaders: ["Content-Type","Authorization"]
 }));
 
-// NO usar app.options("*", cors()) en Express 5
-
+// Rutas 
 app.use("/api", authRoutes);
 app.use("/api", noteRoutes);
 
