@@ -38,6 +38,9 @@ app.use(cors({
   allowedHeaders: ["Content-Type","Authorization"]
 }));
 
+// Healthcheck para probar desde el navegador
+app.get("/api/health", (_req, res) => res.json({ ok: true }));
+
 // Rutas 
 app.use("/api", authRoutes);
 app.use("/api", noteRoutes);
