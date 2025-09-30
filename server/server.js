@@ -25,7 +25,7 @@ app.use(express.json());
 // Lista blanca de orígenes (prod + dev)
 const whitelist = [
   "http://localhost:5173",
-  "https://TU-APP.vercel.app" 
+  "https://notes-manager-ia-proyect.vercel.app" 
 ].filter(Boolean);
 
 // CORS seguro con whitelist (acepta requests sin origin como Postman)
