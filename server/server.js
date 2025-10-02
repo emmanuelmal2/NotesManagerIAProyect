@@ -22,28 +22,29 @@ const app = express();
 app.use(express.json());
 
 
-// Lista blanca de orígenes (prod + dev)
+// ---- CORS (antes de las rutas) ----
 const whitelist = [
   "http://localhost:5173",
-  "https://notes-manager-ia-proyect.vercel.app" 
-].filter(Boolean);
+  "https://notes-manager-ia-proyect.vercel.app",
+];
 
-// CORS seguro con whitelist (acepta requests sin origin como Postman)
-app.use(cors({
+const corsOptions = {
   origin(origin, cb) {
     try {
-      if (!origin) return cb(null, true);
+      if (!origin) return cb(null, true); // Postman/cURL
       const host = new URL(origin).hostname;
-      const ok = whitelist.includes(origin) || host.endsWith(".vercel.app");
+      const ok = whitelist.includes(origin) || host.endsWith(".vercel.app"); // previews
       return ok ? cb(null, true) : cb(new Error("CORS: " + origin));
-    } catch { return cb(new Error("CORS parse error")); }
+    } catch {
+      return cb(new Error("CORS parse error"));
+    }
   },
   methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
   allowedHeaders: ["Content-Type","Authorization"],
-  // credentials: true, // solo si usas cookies
-  optionsSuccessStatus: 204
-}));
-app.use(cors(corsOptions));  
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));        
 
 // Log global: ver TODAS las requests que llegan
 app.use((req, _res, next) => {
