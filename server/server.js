@@ -43,7 +43,7 @@ app.use(cors({
   // credentials: true, // solo si usas cookies
   optionsSuccessStatus: 204
 }));
-app.options("*", cors());
+app.use(cors(corsOptions));  
 
 // Log global: ver TODAS las requests que llegan
 app.use((req, _res, next) => {
