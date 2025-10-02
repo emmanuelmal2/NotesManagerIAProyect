@@ -24,7 +24,7 @@ function Register() {
       await axios.post("/register", form)
       navigate("/login")
     } catch (err) {
-      setError(err.response?.data?.message || err.message)
+      setError(err.response?.data?.message || err.response?.data?.error || err.message)
     } finally {
       setLoading(false)
     }
