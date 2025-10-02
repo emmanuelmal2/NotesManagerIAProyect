@@ -12,6 +12,7 @@ Cada usuario puede registrarse, iniciar sesión y gestionar sus notas personales
 
 ## 🚀 Estado del proyecto
 ⚠️ Proyecto en desarrollo – se planean mejoras y nuevas funciones.
+Demo en linea: notes-manager-ia-proyect-kjkwpv9e1-emmanuel-maldonados-projects.vercel.app
 
 ## 📦 Instalación
 1. Clonar el repositorio:
