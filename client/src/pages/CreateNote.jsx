@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../api/axios"
 import { useNavigate } from "react-router-dom";
 import NoteForm from "../components/NoteForm";
 import "../styles/noteform.css"
 import "../styles/layout.css"
 import "../styles/components.css"
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL + "/api"
 function CreateNote() {
   const [note, setNote] = useState({ title: "", content: "" });
   const [error, setError] = useState(null);
