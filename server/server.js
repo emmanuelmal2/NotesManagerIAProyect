@@ -45,11 +45,23 @@ app.use(cors({
 }));
 app.options("*", cors());
 
+// Log global: ver TODAS las requests que llegan
+app.use((req, _res, next) => {
+  console.log(new Date().toISOString(), req.method, req.path);
+  next();
+});
+
 // Healthcheck para probar desde el navegador
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
 // Rutas 
 app.use("/api", authRoutes);
 app.use("/api", noteRoutes);
+
+// 404 explícito al final (si no coincide ninguna ruta)
+app.use((req, res) => {
+  console.warn("404 ->", req.method, req.path);
+  res.status(404).json({ error: "Not found" });
+});
 
 app.listen(port, () => console.log("Server started on port " + port));
