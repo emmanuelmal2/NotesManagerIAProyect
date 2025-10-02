@@ -21,11 +21,15 @@ function Login() {
     setError(null)
     setLoading(true)
     try {
-      const { data } = await axios.post("/login", form)
-      localStorage.setItem("token", data.token)
-      navigate("/dashboard")
+      const { data } = await axios.post("/login", form);
+      if (!data?.token) {
+        throw new Error("Respuesta inválida del servidor");
+      }
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || err.message)
+      setError(err.response?.data?.message || err.response?.data?.error || err.message);
+
     } finally {
       setLoading(false)
     }
