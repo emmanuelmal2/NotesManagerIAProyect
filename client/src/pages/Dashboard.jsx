@@ -1,12 +1,7 @@
-
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
-
-
-axios.defaults.baseURL = import.meta.env.VITE_API_URL + "/api"
-
+import axios from "../api/axios"
 
 function Dashboard() {
   const [notes, setNotes] = useState([]);
