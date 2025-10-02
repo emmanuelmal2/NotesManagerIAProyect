@@ -31,12 +31,19 @@ const whitelist = [
 // CORS seguro con whitelist (acepta requests sin origin como Postman)
 app.use(cors({
   origin(origin, cb) {
-    if (!origin || whitelist.includes(origin)) return cb(null, true);
-    return cb(new Error("Not allowed by CORS: " + origin));
+    try {
+      if (!origin) return cb(null, true);
+      const host = new URL(origin).hostname;
+      const ok = whitelist.includes(origin) || host.endsWith(".vercel.app");
+      return ok ? cb(null, true) : cb(new Error("CORS: " + origin));
+    } catch { return cb(new Error("CORS parse error")); }
   },
   methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization"]
+  allowedHeaders: ["Content-Type","Authorization"],
+  // credentials: true, // solo si usas cookies
+  optionsSuccessStatus: 204
 }));
+app.options("*", cors());
 
 // Healthcheck para probar desde el navegador
 app.get("/api/health", (_req, res) => res.json({ ok: true }));

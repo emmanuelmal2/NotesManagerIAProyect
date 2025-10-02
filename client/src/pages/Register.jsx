@@ -1,11 +1,9 @@
 import React, { useState } from "react"
-import axios from "axios"
+import axios from "../api/axios"
 import { useNavigate, Link } from "react-router-dom"
 import "../styles/auth.css"
 import "../styles/components.css"
 import "../styles/layout.css"
-
-axios.defaults.baseURL = import.meta.env.VITE_API_URL + "/api"
 
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" })
