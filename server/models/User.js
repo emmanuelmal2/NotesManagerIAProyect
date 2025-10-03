@@ -19,6 +19,6 @@ const userSchema = new mongoose.Schema({
         default: Date.now,
     }
 })
-userSchema.index({ email: 1 }, { unique: true });
+const User = new mongoose.model("User", userSchema);
 
 export default User
