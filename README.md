@@ -12,6 +12,9 @@ Cada usuario puede registrarse, iniciar sesión y gestionar sus notas personales
 
 ## 🚀 Estado del proyecto
 ⚠️ Proyecto en desarrollo – se planean mejoras y nuevas funciones.
+[Demo en linea](https://notes-manager-ia-proyect.vercel.app)
+
+
 
 ## 📦 Instalación
 1. Clonar el repositorio:
