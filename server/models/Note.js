@@ -1,25 +1,72 @@
 import mongoose from "mongoose";
 
-const noteSchema = new mongoose.Schema({
-    title:{
-        type: String,
-        required:true 
+const itemSchema = new mongoose.Schema(
+  {
+    //  Dueño del item
+    userId: {
+      type: String,
+      required: true,
     },
-    content:{
-        type: String,
-        required:true
+
+    // Contenido en notas y tareas
+    title: {
+      type: String,
+      default: "",
+      trim: true,
     },
-    createdAt:{
-        type: Date,
-        default: Date.now,
+    content: {
+      type: String,
+      default: "",
     },
-    user:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }
 
-})
+    // Tipo de ítem: false = Nota, true = Tarea
+    isTask: {
+      type: Boolean,
+      default: false,
+    },
 
-const Note = new mongoose.model("Note", noteSchema)
+    // Campos de tareas
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+    },
+    status: {
+      type: String,
+      enum: ["todo", "doing", "done"],
+      default: "todo",
+    },
+    dueDate: {
+      type: Date,
+    },
 
-export default Note
+    // Recordatorios
+    remindAt: {
+      type: Date,
+    },
+    remindSent: {
+      type: Boolean,
+      default: false,
+    },
+
+    // Organización
+    tags: {
+      type: [String],
+      default: [],
+    },
+    pinned: {
+      type: Boolean,
+      default: false,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true, // crea automáticamente createdAt y updatedAt
+  }
+);
+
+const Item = mongoose.model("Item", itemSchema);
+export default Item;
