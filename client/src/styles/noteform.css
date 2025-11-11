@@ -1,4 +1,102 @@
-.noteform-card { padding: var(--space-6); margin-top: var(--space-6); }
-.noteform-wrap { width: 100%; max-width: 820px; margin: 0 auto; }
-.noteform-title { margin: 0 0 var(--space-4); font-size: 1.4rem; font-weight: 600; }
-.noteform-actions { display:flex; gap: var(--space-3); justify-content:flex-end; margin-top: var(--space-4); }
+.noteform-card { 
+    padding: var(--space-6); margin-top: var(--space-6); 
+}
+.noteform-wrap { 
+    width: 100%; max-width: 820px; margin: 0 auto; 
+}
+.noteform-title { 
+    margin: 0 0 var(--space-4); font-size: 1.4rem; font-weight: 600; 
+}
+.noteform-actions { 
+    display:flex; gap: var(--space-3); justify-content:flex-end; margin-top: var(--space-4); 
+}
+
+/* diferencias nota vs tarea */
+.noteform-wrap.is-note  { --accent: #7c9cff; } /* azul */
+.noteform-wrap.is-task  { --accent: #f6b043; } /* amarillo */
+
+/* barra arriba */
+.noteform-wrap {
+  position: relative;
+}
+.noteform-wrap::before {
+  content:"";
+  position: absolute;
+  top:-1px; left:0; right:0;
+  height:3px;
+  background:var(--accent);
+  border-radius:3px 3px 0 0;
+}
+
+/* botón primario toma el acento */
+.noteform-wrap .btn {
+  background:var(--accent);
+  border:0;
+  color:#0a0e14;
+}
+.noteform-wrap .btn:disabled { opacity:.6; }
+
+/* badge del título */
+.noteform-title {
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.noteform-title .badge {
+  padding:2px 6px;
+  font-size:12px;
+  border-radius:6px;
+  border:1px solid var(--border, #2a3444);
+  background:color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* borde del fieldset según tipo */
+.noteform-wrap.is-task fieldset {
+  border-color: var(--accent) !important;
+}
+
+.noteform-wrap.is-note fieldset {
+  border-color: var(--accent) !important;
+}
+
+.noteform-wrap.is-task select:focus,
+.noteform-wrap.is-task .input:focus,
+.noteform-wrap.is-task textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.noteform-wrap.is-note select:focus,
+.noteform-wrap.is-note .input:focus,
+.noteform-wrap.is-note textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+/* Forzar date input oscuro y recolorear el icono */
+.noteform-wrap input[type="date"] {
+  background-color: #151b23;   /* tu fondo */
+  color: #e6eefc;              /* texto claro */
+  border: 1px solid #2a3444;
+  border-radius: 10px;
+  color-scheme: dark;          /* ayuda en navegadores a pintar controles oscuros */
+}
+
+/* Estilo del ícono del calendario (Chromium/WebKit) */
+.noteform-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: .85;
+  filter: invert(85%) brightness(95%);   /* base: lo “oscurece” */
+}
+
+/* Modo Tarea: dora el icono con el acento */
+.noteform-wrap.is-task input[type="date"]::-webkit-calendar-picker-indicator {
+  /* dorado/ámbar */
+  filter: invert(70%) sepia(90%) saturate(500%) hue-rotate(350deg) brightness(1.05);
+}
+
+/* Modo Nota: azul acento */
+.noteform-wrap.is-note input[type="date"]::-webkit-calendar-picker-indicator {
+  /* azul */
+  filter: invert(72%) sepia(14%) saturate(1300%) hue-rotate(190deg) brightness(1.05);
+}
+
+
