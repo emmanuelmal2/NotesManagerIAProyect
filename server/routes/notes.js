@@ -1,49 +1,53 @@
 import express from "express"
 import auth from "../middleware/auth.js"
-import Note from "../models/Note.js"
+import Item from "../models/Note.js"
 
 const router =  express.Router();
 
 // ruta para crear una nueva nota 
 router.post("/notes", auth, async (req, res) =>{
-    const { title, content, isTask, priority, status, dueDate, remindAt, remindSent, tags, pinned, archived } = req.body;
-
-    const newItem = new Item({
-        title,
-        content,
-        userId: req.user.id,
-        isTask: isTask || false, // si no, será nota
-        priority,
-        status,
-        dueDate,
-        remindAt,
-        remindSent,
-        tags,
-        pinned,
-        archived
-    });
-
+ 
     try{
-        await newNote.save();
-        res.json({message:"Nota creada exitosamente"})
+        const { title, content, isTask, priority, status, dueDate, remindAt, tags, pinned, archived } = req.body;
+
+        const newItem = new Item({
+            title,
+            content,
+            userId: req.user.id,
+            isTask: isTask || false, // si no, será nota
+            priority,
+            status,
+            dueDate,
+            remindAt,
+            tags,
+            pinned,
+            archived
+        });
+
+        await newItem.save();
+        res.json({message:"Item creado exitosamente"})
     }catch(error){
-        res.status(500).json({error:"Error al crear la nota"})
+        res.status(500).json({error:"Error al crear el item"})
     }
 });
 
 // Se muestran los items segun su tipo 
-router.get("/notes", auth, async (req, res) =>{
-    const {type, status} = req.query
-    const filter = {};
+router.get("/notes", auth, async (req, res) => {
+  try {
+    const { type, status, query } = req.query;
 
-    // Se agregan las condiciones segun vayan existiendo 
+    const filter = { userId: req.user.id };
     if (type === "task") filter.isTask = true;
     if (type === "note") filter.isTask = false;
     if (status) filter.status = status;
+    if (query) filter.title = { $regex: query, $options: "i" }; // simple búsqueda por título
 
-    const items = await Note.find(filter);
+    const items = await Item.find(filter).sort({ pinned: -1, updatedAt: -1 });
     res.json(items);
-
+  } catch (error) {
+    console.error("GET /notes error:", error);
+    res.status(500).json({ error: "Error al listar items" });
+  }
 });
 
 
@@ -68,21 +72,23 @@ router.get("/notes/:id", auth, async(req,res) => {
 })
 */
 
-router.delete("/notes/:id", auth, async (req, res)=>{
-    try{
-        const eliminatedNote = await Note.findOneAndDelete({user: req.user.id, _id: req.params.id})
-        if(eliminatedNote){
-            res.json({message: "Nota eliminada correctamente"})
-        }else{
-            res.json({error: "No se encontro ninguna nota asocidada"})
-        }
-    }catch(error){
-        res.status(400).json({error:"Formato de id invalido"})
-    }
-})
+// DELETE
+router.delete("/notes/:id", auth, async (req, res) => {
+  try {
+    const deleted = await Item.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+    if (!deleted) return res.status(404).json({ error: "Item no encontrado" });
+    res.json({ message: "Item eliminado correctamente" });
+  } catch (error) {
+    console.error("DELETE /notes/:id error:", error);
+    res.status(400).json({ error: "Error al eliminar el item" });
+  }
+});
 
-// PATCH /api/items/:id  (actualización parcial y segura)
-router.patch("/items/:id", auth, async (req, res) => {
+// PATCH   (actualización parcial y segura)
+router.patch("/notes/:id", auth, async (req, res) => {
   try {
     // Campos que puede tocar el usuario
     const allowed = [
@@ -115,14 +121,14 @@ router.patch("/items/:id", auth, async (req, res) => {
 
     // Normaliza fechas si vienen como string
     if (updates.dueDate) {
-        updates.remindAt = new Date(updates.remindAt);
+        updates.dueDate = new Date(updates.dueDate);
     }
     if (updates.remindAt) {
         updates.remindAt = new Date(updates.remindAt);
     }
 
     // Actualiza si el item pertenece al usuario autenticado
-    const item = await Note.findOneAndUpdate(
+    const item = await Item.findOneAndUpdate(
       { _id: req.params.id, userId: req.user.id },
       { $set: updates },
       { new: true, runValidators: true } // devuelve el doc actualizado y respeta enums, etc.
