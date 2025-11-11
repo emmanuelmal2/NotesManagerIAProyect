@@ -1,13 +1,24 @@
 import React, { useState } from "react";
-import axios from "../api/axios"
+import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import NoteForm from "../components/NoteForm";
-import "../styles/noteform.css"
-import "../styles/layout.css"
-import "../styles/components.css"
+import "../styles/noteform.css";
+import "../styles/layout.css";
+import "../styles/components.css";
 
 function CreateNote() {
-  const [note, setNote] = useState({ title: "", content: "" });
+  const [note, setNote] = useState({
+    title: "",
+    content: "",
+    isTask: false,
+    priority: "medium",
+    status: "todo",
+    dueDate: "",        // como string YYYY-MM-DD en el front
+    tags: [],
+    pinned: false,
+    archived: false,
+  });
+
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +40,13 @@ function CreateNote() {
         return;
       }
 
-      await axios.post("/notes", note, {
+      // Tip: si dueDate es "", puedes omitirla o enviarla null
+      const payload = {
+        ...note,
+        dueDate: note.dueDate ? new Date(note.dueDate) : null,
+      };
+
+      await axios.post("/notes", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -56,7 +73,6 @@ function CreateNote() {
       </div>
     </div>
   );
-
 }
- 
+
 export default CreateNote;
