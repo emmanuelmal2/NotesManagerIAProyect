@@ -13,6 +13,7 @@ function NoteForm({
   disabled = false,
   showCancel = true,
   cancelTo = "/dashboard",
+  showTypeSelector = true,
 }) {
   //  Maneja inputs de texto/select de forma genérica
   function handleChange(e) {
@@ -104,14 +105,23 @@ function NoteForm({
           />
         </div>
 
-        {/* Tipo: nota/tarea */}
-        <div className="field">
-          <label htmlFor="tipo">Tipo</label>
-          <select className = "input" id="tipo" name="tipo" value={note.isTask ? "tarea" : "nota"} onChange={handleTaskSelect} disabled={isSubmitting}>
-            <option value="nota">Nota</option>
-            <option value="tarea">Tarea</option>
-          </select>
-        </div>
+        {/* Tipo: nota/tarea (opcional) */}
+        {showTypeSelector && (
+          <div className="field">
+            <label htmlFor="tipo">Tipo</label>
+            <select
+              className="input"
+              id="tipo"
+              name="tipo"
+              value={note.isTask ? "tarea" : "nota"}
+              onChange={handleTaskSelect}
+              disabled={isSubmitting}
+            >
+              <option value="nota">Nota</option>
+              <option value="tarea">Tarea</option>
+            </select>
+          </div>
+        )}
 
         {/* Campos de tarea (solo si isTask) */}
         {note.isTask && (

@@ -1,16 +1,125 @@
-
-.dashboard-header{ display:flex; justify-content:flex-end; margin-bottom: var(--space-4) }
-
-.note{
-  padding: var(--space-4); margin-bottom: var(--space-3);
+.dashboard {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.note-header{ display:flex; justify-content:space-between; gap: var(--space-3) }
-.note-title{ margin:0; font-size:1.1rem }
-.note-date{ margin:0; color: var(--muted); font-size:.9rem }
-.note-body{ margin-top:.5rem; line-height:1.6 }
-.note-footer{ margin-top: var(--space-3); display:flex; gap:.5rem }
 
-.empty{
-  border:1px dashed var(--border); padding: var(--space-6);
-  border-radius: var(--radius); text-align:center; color: var(--muted);
+
+.dashboard-header {
+
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-4);
+}
+
+/* Grid que aprovecha el ancho */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+/* Tarjeta de nota */
+.card.note {
+  position: relative;
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  background: var(--surface, #12151f);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border, #262b3f);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.card.note:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  border-color: var(--primary, #3b82f6);
+}
+
+/* Encabezado: título + fecha */
+.note-header {
+  margin-bottom: var(--space-2);
+}
+
+.note-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.note-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.note-date {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted, #9ca3af);
+}
+
+/* Cuerpo de la nota */
+.note-body {
+  margin-top: 0.25rem;
+  line-height: 1.5;
+}
+
+/* Footer (solo PDF) */
+.note-footer {
+  margin-top: var(--space-3);
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Botón borrar flotante */
+.note-delete {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  border: none;
+  background: transparent;
+  color: var(--muted, #9ca3af);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.note-delete:hover {
+  color: #f87171;
+  transform: scale(1.1);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge--pdf {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.5);
+}
+
+/* Texto recortado a unas cuantas líneas */
+.ellipsis-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

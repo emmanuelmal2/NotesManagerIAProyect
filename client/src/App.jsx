@@ -6,6 +6,10 @@ import EditNote   from "./pages/EditNote";
 import Login      from "./pages/Login";
 import Register   from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TasksPage from "./pages/TaskPage";
+import CreateTask from "./pages/CreateTask";
+import Home from "./pages/Home";
+
 
 function App() {
   return (
@@ -16,13 +20,16 @@ function App() {
 
       {/* Rutas protegidas */}
       <Route element={<ProtectedRoute />}>
+        <Route path="/home" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/new" element={<CreateNote />} />
         <Route path="/edit/:id" element={<EditNote />} />
+        <Route path="/tasks" element={<TasksPage />} />
+        <Route path="/tasks/new" element={<CreateTask />} />
       </Route>
 
       {/* Raíz y fallback */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<Navigate to="/home" replace />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );

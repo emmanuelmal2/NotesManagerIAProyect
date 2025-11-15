@@ -4,6 +4,8 @@ import { useNavigate, Link } from "react-router-dom"
 import "../styles/auth.css"
 import "../styles/components.css"
 import "../styles/layout.css"
+import "../styles/tasks.css"
+
 
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" })

@@ -62,6 +62,15 @@ const itemSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    // New feature: subida de PDF´s
+    file: {
+      isPdf: { type: Boolean, default: false },
+      name: String,
+      url: String,
+      mime: String,
+      size: Number,
+    },    
   },
   {
     timestamps: true, // crea automáticamente createdAt y updatedAt

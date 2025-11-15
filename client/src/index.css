@@ -36,11 +36,7 @@ body {
   flex-direction: column;
 }
 
-.container {
-  width: min(1100px, 92vw);
-  margin: 0 auto;
-  padding: 24px 0 48px;
-}
+
 
 /* Helpers */
 .center { display: grid; place-items: center; }
@@ -65,15 +61,7 @@ nav {
   border-bottom: 1px solid rgba(255,255,255,.06);
 }
 
-.navbar {
-  width: min(1100px, 92vw);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 12px 0;
-}
+
 
 .brand { font-weight: 700; letter-spacing: .2px; }
 .brand a { color: var(--text); text-decoration: none; }
@@ -200,11 +188,7 @@ button:active { transform: translateY(1px); }
 /* ======================================================
    Dashboard / Notas
 ====================================================== */
-.dashboard {
-  width: min(1100px, 92vw);
-  margin: 0 auto;
-  padding: 24px 0 48px;
-}
+
 
 .dashboard-header {
   display: flex;

@@ -26,7 +26,7 @@ function Login() {
         throw new Error("Respuesta inválida del servidor");
       }
       localStorage.setItem("token", data.token);
-      navigate("/dashboard");
+      navigate("/home");
     } catch (err) {
       setError(err.response?.data?.message || err.response?.data?.error || err.message);
 

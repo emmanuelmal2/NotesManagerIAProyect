@@ -53,6 +53,7 @@ router.post("/register", async (req, res) => {
 });
 
 /* -------- LOGIN -------- */
+
 router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body || {};
@@ -62,26 +63,29 @@ router.post("/login", async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ message: "Faltan campos" });
     }
-    if (!isEmail(email)) {
-      return res.status(400).json({ message: "Email inválido" });
-    }
 
-    const user = await User.findOne({ email }).select("email password").exec();
-    // Mensaje genérico para no revelar si el email existe
+    const user = await User
+      .findOne({ email })
+      .select("_id email password")     // 👈 incluye _id
+      .exec();
+
     const invalidMsg = "Credenciales inválidas";
-
-    if (!user) {
-      return res.status(401).json({ message: invalidMsg });
-    }
+    if (!user) return res.status(401).json({ message: invalidMsg });
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return res.status(401).json({ message: invalidMsg });
-    }
+    if (!match) return res.status(401).json({ message: invalidMsg });
 
-    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    // 👇 Firma el token con id + email
+    const token = jwt.sign(
+      {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
 
     return res.json({ token });
   } catch (error) {
@@ -90,9 +94,23 @@ router.post("/login", async (req, res) => {
   }
 });
 
-/* -------- PROFILE -------- */
-router.get("/me", auth, (req, res) => {
-  res.json({ token: req.user });
+router.get("/me", auth, async (req, res) => {
+  try {
+    // Si quieres evitar otra consulta, puedes responder directo con req.user:
+    return res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email,
+    });
+
+    // Alternativa (no necesaria, pero por claridad):
+    // const user = await User.findById(req.user.id).select("name email").lean();
+    // return res.json({ id: user._id, name: user.name, email: user.email });
+  } catch (err) {
+    console.error("/me error:", err);
+    return res.status(500).json({ error: "Error al obtener perfil" });
+  }
 });
+
 
 export default router;

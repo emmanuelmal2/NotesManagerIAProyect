@@ -1,8 +1,31 @@
 import express from "express"
 import auth from "../middleware/auth.js"
 import Item from "../models/Note.js"
+import { uploadPdf } from "../config/cloudinary.js";
 
 const router =  express.Router();
+
+// Obtener una sola nota por id
+router.get("/notes/:id", auth, async (req, res) => {
+  try {
+    const item = await Item.findOne({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+
+    if (!item) {
+      return res.status(404).json({ error: "Item no encontrado" });
+    }
+
+    res.json(item);
+  } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(400).json({ error: "Formato de id inválido" });
+    }
+    console.error("GET /notes/:id error:", error);
+    res.status(500).json({ error: "Error del servidor" });
+  }
+});
 
 // ruta para crear una nueva nota 
 router.post("/notes", auth, async (req, res) =>{
@@ -49,6 +72,56 @@ router.get("/notes", auth, async (req, res) => {
     res.status(500).json({ error: "Error al listar items" });
   }
 });
+
+
+// server/routes/notes.js
+router.post("/notes/pdf", auth, uploadPdf.single("file"), async (req, res) => {
+  try {
+    const userId = req.user?.id || req.user?._id || req.user?.userId;
+    if (!userId) {
+      console.warn("Auth sin userId. req.user =", req.user);
+      return res.status(401).json({ error: "No autorizado (token inválido)" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "Falta el archivo PDF" });
+    }
+
+    console.log("PDF subido a Cloudinary:", req.file);
+
+    const { originalname, mimetype } = req.file;
+
+    // Con multer-storage-cloudinary, normalmente:
+    // - req.file.path = secure_url
+    // - req.file.filename / public_id = id en Cloudinary
+    const url = req.file.secure_url || req.file.path || req.file.url;
+    if (!url) {
+      return res.status(500).json({ error: "Cloudinary no devolvió URL" });
+    }
+
+    const title =
+      (req.body.title?.trim()) || originalname.replace(/\.pdf$/i, "");
+
+    const item = await Item.create({
+      userId,
+      title,
+      isTask: false,
+      content: "",
+      file: {
+        isPdf: true,
+        name: originalname,
+        url,
+        mime: mimetype || "application/pdf",
+      },
+    });
+
+    res.json(item);
+  } catch (err) {
+    console.error("POST /notes/pdf error:", err);
+    res.status(500).json({ error: "No se pudo subir el PDF" });
+  }
+});
+
 
 
 //endpoint para buscar una sola nota
