@@ -1,60 +1,103 @@
+/* ============================================
+   PÁGINA DE TAREAS (layout general)
+   ============================================ */
+
 /* Contenedor principal de la página de tareas */
-.tasks-page{
-  max-width: 1180px;          /* más ancho que el dashboard normal */
+.tasks-page {
+  max-width: 1180px;          /* un poco más ancho que el resto */
   margin: 0 auto;
   padding-top: var(--space-6);
-  display:flex;
-  flex-direction:column;
-  gap:var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
-/* Título + botón */
-.tasks-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+/* Título + botón "Nueva tarea" */
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Layout 2 columnas: calendario grande izq, tareas der */
-.tasks-layout{
-  display:grid;
+/* Layout 2 columnas: calendario + lista de tareas */
+.tasks-layout {
+  display: grid;
   grid-template-columns: 1.5fr 1.5fr;  /* mitad y mitad */
-
-
-  gap:var(--space-6);
-  align-items:flex-start;
+  gap: var(--space-6);
+  align-items: flex-start;
 }
 
 /* En pantallas pequeñas se apilan */
-@media (max-width: 900px){
-  .tasks-layout{
+@media (max-width: 900px) {
+  .tasks-layout {
     grid-template-columns: 1fr;
   }
 }
 
+/* ============================================
+   LISTA DE TAREAS
+   ============================================ */
 
-/* Resaltar días con tareas */
-.has-task-day {
-  background: rgba(58, 111, 247, .2) !important;
-  border-radius: 50%;
+/* Contenedor de la lista de tareas */
+.tasks-list-items {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-3) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
-/* Lista de tareas */
-.tasks-list-items{
-  list-style:none;
-  padding:0;
-  margin:var(--space-2) 0 0;
-  display:flex;
-  flex-direction:column;
-  gap:var(--space-2);
-}
-.task-item{
-  padding:var(--space-3);
-  border-radius:var(--radius);
-  background:#131923;
+/* Tarjeta base de tarea */
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #060b17;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
-/* ====== CALENDARIO DARK THEME ====== */
+/* Colores según prioridad */
+.task-item--high {
+  border-color: #f97373; /* rojo */
+  box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.35);
+}
+
+.task-item--medium {
+  border-color: #facc15; /* amarillo */
+  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.25);
+}
+
+.task-item--low {
+  border-color: #22c55e; /* verde */
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.25);
+}
+
+/* Título y contenido dentro de la tarjeta */
+.task-item-title {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.task-item-body {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+}
+
+/* Contenedor de acciones (botones editar / completar / borrar, etc.) */
+.task-item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ============================================
+   CALENDARIO (tema oscuro)
+   ============================================ */
 
 .tasks-calendar .react-calendar {
   width: 100%;
@@ -135,7 +178,8 @@
 }
 
 /* Días fuera del mes actual */
-.tasks-calendar .react-calendar__month-view__days__day--neighboringMonth {
+.tasks-calendar
+  .react-calendar__month-view__days__day--neighboringMonth {
   color: #4b5563;
 }
 
@@ -144,7 +188,11 @@
   color: #e5e7eb;
 }
 
-/* DÍAS CON TAREAS (además de lo que ya tenías) */
+/* ============================================
+   DÍAS CON TAREAS
+   ============================================ */
+
+/* Marca que el día tiene al menos una tarea */
 .tasks-calendar .has-task-day {
   position: relative;
 }
@@ -164,58 +212,4 @@
 .tasks-calendar .react-calendar__tile:focus {
   outline: none;
   box-shadow: 0 0 0 1px #3b82f6;
-}
-
-/* Contenedor de la lista */
-.tasks-list-items {
-  list-style: none;
-  padding: 0;
-  margin: var(--space-3) 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-/* Tarjeta base de tarea */
-.task-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: #060b17;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-}
-
-/* Colores según prioridad */
-.task-item--high {
-  border-color: #f97373; /* rojo */
-  box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.35);
-}
-
-.task-item--medium {
-  border-color: #facc15; /* amarillo */
-  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.25);
-}
-
-.task-item--low {
-  border-color: #22c55e; /* verde */
-  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.25);
-}
-
-.task-item-title {
-  display: block;
-  margin-bottom: 4px;
-}
-
-.task-item-body {
-  margin: 4px 0 0;
-  font-size: 0.9rem;
-}
-
-.task-item-actions {
-  display: flex;
-  align-items: center;
 }

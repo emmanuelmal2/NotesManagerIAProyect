@@ -1,0 +1,121 @@
+/* src/styles/auth.css */
+
+/* Contenedor general: centra la tarjeta en la pantalla */
+.auth-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+/* Tarjeta de login / registro */
+.auth-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 32px 40px !important; /* MÁS ESPACIO */
+}
+
+
+/* Título */
+.auth-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Campos del formulario */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+/* Inputs solo dentro del auth-card, para no tocar otros lados */
+.auth-card .input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: #020617;
+  color: #e5e7eb;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.auth-card .input::placeholder {
+  color: #64748b;
+}
+
+.auth-card .input:focus {
+  border-color: var(--brand, #6366f1);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.45);
+  background: #020617;
+}
+
+/* Acciones: botón + enlace de registro */
+.auth-actions {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auth-actions .btn {
+  min-width: 140px;
+}
+
+/* Alertas de error simples (puedes ajustar si ya tienes .alert en otro lado) */
+.auth-card .alert {
+  margin-bottom: 0.75rem;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  background: #2a1214;
+  color: #fecaca;
+  border: 1px solid #7f1d1d;
+}
+
+/* Enlace "Regístrate" */
+.auth-actions .link {
+  color: #60a5fa;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-actions .link:hover {
+  text-decoration: underline;
+}
+
+/* Un poquito de resposive */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 18px;
+  }
+
+  .auth-title {
+    font-size: 1.4rem;
+  }
+
+  .auth-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .auth-actions .btn {
+    width: 100%;
+  }
+
+  .auth-actions .muted {
+    text-align: center;
+  }
+}

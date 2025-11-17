@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import Dashboard  from "./pages/Dashboard";
 import CreateNote from "./pages/CreateNote";
 import EditNote   from "./pages/EditNote";
@@ -9,6 +8,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TasksPage from "./pages/TaskPage";
 import CreateTask from "./pages/CreateTask";
 import Home from "./pages/Home";
+import PdfNote from "./pages/PdfNote";
+
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/edit/:id" element={<EditNote />} />
         <Route path="/tasks" element={<TasksPage />} />
         <Route path="/tasks/new" element={<CreateTask />} />
+        <Route path="/pdf/:id" element={<PdfNote />} />
       </Route>
 
       {/* Raíz y fallback */}

@@ -149,7 +149,7 @@ export default function Dashboard() {
                 className="btn btn-outline btn-sm"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handlePreviewPdf(note);
+                  navigate(`/pdf/${note._id}`);
                 }}
               >
                 Ver
