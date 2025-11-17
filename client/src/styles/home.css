@@ -1,4 +1,6 @@
-/* Ocupa toda la altura y centra el contenido */
+/* Estilos generales de la home page del usuario */
+
+/* Ocupa toda la pantalla y centra el contenido del grid */
 .home-wrapper {
   min-height: 100vh;
   display: flex;
@@ -7,7 +9,9 @@
   padding: 40px 16px;
 }
 
-/* Grid principal: hero + features */
+/* Contenedor principal:
+   - Grid de dos columnas (hero + features)
+   - Se adapta según el ancho disponible */
 .home-inner {
   width: min(1100px, 92vw);
   margin: 0 auto;
@@ -17,19 +21,20 @@
   align-items: center;
 }
 
-/* Hero (columna izquierda) */
+/* Columna izquierda */
+
 .home-hero {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 16px; /* espacio vertical entre elementos */
 }
 
-/* Pastillita de arriba */
+/* Pastilla superior con texto breve */
 .home-pill {
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 999px; /* forma de píldora */
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -38,25 +43,25 @@
   border: 1px solid rgba(129, 140, 248, 0.5);
 }
 
-/* Título grande */
+/* Título principal grande */
 .home-title {
   font-size: 2.8rem;
   font-weight: 800;
   line-height: 1.1;
 }
 
-/* Manito separada un poco */
+/* Espacio para la mano junto al "Hola" */
 .home-wave {
   margin-left: 0.35rem;
 }
 
-/* Subtítulo */
+/* Texto descriptivo¿o */
 .home-subtitle {
   color: var(--muted);
   max-width: 34rem;
 }
 
-/* Botones */
+/* Botones principales (Ver notas / Ver tareas) */
 .home-actions {
   margin-top: 12px;
   display: flex;
@@ -64,12 +69,14 @@
   gap: 0.75rem;
 }
 
-/* Columna derecha: cards de features */
+/* Columna derecha */
+
 .home-features {
   display: grid;
-  gap: 16px;
+  gap: 16px; /* espacio entre tarjetas */
 }
 
+/* Tarjetas con las características del sistema */
 .home-feature-card {
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
   border-radius: var(--radius);
@@ -90,51 +97,58 @@
   color: var(--muted);
 }
 
-/* Responsive: en móvil todo en columna */
+/* Para pantallas pequeñas */
+
 @media (max-width: 900px) {
+  /* Layout se vuelve una sola columna */
   .home-inner {
     grid-template-columns: 1fr;
     text-align: center;
   }
 
+  /* Centra el contenido del hero */
   .home-hero {
     align-items: center;
   }
 
+  /* Subtítulo ocupa todo el ancho disponible */
   .home-subtitle {
     max-width: 100%;
   }
 
+  /* Botones centrados en mobile */
   .home-actions {
     justify-content: center;
   }
 
+  /* Las tarjetas siguen alineadas a la izquierda para legibilidad */
   .home-feature-card {
     text-align: left;
   }
 }
 
+/* Efecto de escritura */
 
 .typing-text span {
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 3px solid #00ffcc;
-    font-size: 3rem;
-    animation: typing 4s steps(15, end) infinite, blink 0.7s step-end infinite;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap; /* evita salto de línea */
+  border-right: 3px solid #00ffcc; /* cursor tipo terminal */
+  font-size: 3rem;
+  animation: 
+    typing 4s steps(15, end) infinite,
+    blink 0.7s step-end infinite;
 }
 
+/* Animación de escribir */
 @keyframes typing {
-    from {
-        width: 0;
-    }
-    to {
-        width: 100%;
-    }
+  from { width: 0; }
+  to { width: 100%; }
 }
 
+/* Parpadeo del cursor */
 @keyframes blink {
-    50% {
-        border-color: transparent;
-    }
+  50% {
+    border-color: transparent;
+  }
 }

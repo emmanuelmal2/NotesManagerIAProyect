@@ -10,10 +10,11 @@ dotenv.config();
 const router = express.Router();
 const saltRounds = 10;
 
+// Validador simple de email
 const isEmail = (s) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s || "").toLowerCase());
 
-/* -------- REGISTER -------- */
+// Ruta para registrar a un usuario 
 router.post("/register", async (req, res) => {
   try {
     let { name, email, password } = req.body || {};
@@ -21,7 +22,7 @@ router.post("/register", async (req, res) => {
     email = String(email || "").trim().toLowerCase();
     password = String(password || "");
 
-    // Validaciones
+    // Validaciones básicas
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Faltan campos" });
     }
@@ -32,18 +33,19 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
     }
 
-    // Existencia
+    // Evitar duplicados
     const existingUser = await User.findOne({ email }).lean().exec();
     if (existingUser) {
       return res.status(400).json({ message: "Usuario ya registrado" });
     }
 
+    // Hash y creación
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     await User.create({ name, email, password: hashedPassword });
 
     return res.status(201).json({ message: "Usuario registrado con éxito" });
   } catch (error) {
-    // Manejar duplicado por índice único (ver modelo abajo)
+    // Error de índice único
     if (error?.code === 11000) {
       return res.status(400).json({ message: "Usuario ya registrado" });
     }
@@ -52,8 +54,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-/* -------- LOGIN -------- */
-
+// Ruta para iniciar sesion
 router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body || {};
@@ -64,18 +65,20 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Faltan campos" });
     }
 
+    // Buscar al usuario
     const user = await User
       .findOne({ email })
-      .select("_id email password")     // 👈 incluye _id
+      .select("_id email password")
       .exec();
 
     const invalidMsg = "Credenciales inválidas";
     if (!user) return res.status(401).json({ message: invalidMsg });
 
+    // Comparación de contraseña
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: invalidMsg });
 
-    // 👇 Firma el token con id + email
+    // Crear token
     const token = jwt.sign(
       {
         id: user._id.toString(),
@@ -86,7 +89,6 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-
     return res.json({ token });
   } catch (error) {
     console.error("LOGIN ERROR:", error);
@@ -94,23 +96,19 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Ruta para obtener el perfil del usuario 
 router.get("/me", auth, async (req, res) => {
   try {
-    // Si quieres evitar otra consulta, puedes responder directo con req.user:
+    // Respuesta directa desde el middleware
     return res.json({
       id: req.user.id,
       name: req.user.name,
       email: req.user.email,
     });
-
-    // Alternativa (no necesaria, pero por claridad):
-    // const user = await User.findById(req.user.id).select("name email").lean();
-    // return res.json({ id: user._id, name: user.name, email: user.email });
   } catch (err) {
     console.error("/me error:", err);
     return res.status(500).json({ error: "Error al obtener perfil" });
   }
 });
-
 
 export default router;

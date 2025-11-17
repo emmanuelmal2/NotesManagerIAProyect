@@ -1,4 +1,4 @@
-// src/pages/EditNote.jsx
+// Página para editar una nota o tarea existente
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
@@ -8,9 +8,11 @@ import "../styles/layout.css";
 import "../styles/components.css";
 
 function EditNote() {
+  // ID de la nota/tarea tomado de la URL (/edit/:id)
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Estado de la nota a editar
   const [note, setNote] = useState({
     title: "",
     content: "",
@@ -22,13 +24,14 @@ function EditNote() {
     tags: [],
     pinned: false,
     archived: false,
-    file: undefined,
+    file: undefined, // info del archivo asociado (si existe)
   });
 
-  const [error, setError] = useState(null);
-  const [loadingFetch, setLoadingFetch] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);        // mensaje de error
+  const [loadingFetch, setLoadingFetch] = useState(true); // cargado de datos iniciales
+  const [isSubmitting, setIsSubmitting] = useState(false); // guardando cambios
 
+  // Carga la nota desde el backend al montar el componente o cuando cambia el id
   useEffect(() => {
     async function fetchNote() {
       try {
@@ -38,14 +41,13 @@ function EditNote() {
           return;
         }
 
-        console.log("[EditNote] GET /notes/" + id);
         const res = await axios.get(`/notes/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log("[EditNote] nota cargada:", res.data);
+
+        // Se normalizan los valores para evitar undefined
         setNote({
-          // me aseguro de tener valores por defecto
           title: res.data.title || "",
           content: res.data.content || "",
           isTask: !!res.data.isTask,
@@ -58,18 +60,24 @@ function EditNote() {
           archived: !!res.data.archived,
           file: res.data.file,
         });
+
         setError(null);
       } catch (err) {
         console.error("[EditNote] error al cargar:", err);
         const status = err.response?.status;
+
+        // Manejo de errores según status HTTP
         if (status === 404) {
+          // Nota no encontrada → regresa al dashboard
           navigate("/dashboard");
           return;
         }
         if (status === 401 || status === 403) {
+          // No autorizado → al login
           navigate("/login");
           return;
         }
+
         setError(err.response?.data?.error || err.message);
       } finally {
         setLoadingFetch(false);
@@ -79,16 +87,19 @@ function EditNote() {
     fetchNote();
   }, [id, navigate]);
 
+  // Maneja el envío del formulario para guardar cambios
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
 
+    // Validación simple
     if (!note.title.trim() || !note.content.trim()) {
       setError("Completa título y contenido");
       return;
     }
 
     setIsSubmitting(true);
+
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -96,6 +107,7 @@ function EditNote() {
         return;
       }
 
+      // Solo se envían los campos editables
       const payload = {
         title: note.title,
         content: note.content,
@@ -108,12 +120,11 @@ function EditNote() {
         archived: note.archived,
       };
 
-      console.log("[EditNote] PATCH /notes/" + id, payload);
-
       await axios.patch(`/notes/${id}`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      // Después de guardar, regresa al dashboard
       navigate("/dashboard");
     } catch (err) {
       console.error("[EditNote] error al guardar:", err);
@@ -123,6 +134,7 @@ function EditNote() {
     }
   }
 
+  // Estado de carga mientras se obtiene la nota del backend
   if (loadingFetch) {
     return (
       <div className="container">
@@ -135,7 +147,7 @@ function EditNote() {
 
   return (
     <div className="container">
-      {/* Este título es solo para verificar que estás en EditNote */}
+      {/* Título de la página, indica si es nota o tarea */}
       <h1 style={{ color: "#fff", marginBottom: "1rem" }}>
         Editar {note.isTask ? "tarea" : "nota"}
       </h1>
@@ -156,7 +168,7 @@ function EditNote() {
           }
           showCancel
           cancelTo="/dashboard"
-          showTypeSelector={false}
+          showTypeSelector={false} 
         />
       </div>
     </div>

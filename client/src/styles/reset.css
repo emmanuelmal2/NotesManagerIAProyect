@@ -1,8 +1,44 @@
-*{box-sizing:border-box}
-html,body,#root{height:100%}
-body{
-  margin:0; background:var(--bg); color:var(--text); font-family:var(--font);
-  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+/* Reset base global + estilos fundamentales del layout*/
+
+/* Aplica box-sizing consistente en toda la app:
+   - Incluye el padding y borde dentro del width/height
+   - Evita cálculos inesperados en el layout */
+* {
+  box-sizing: border-box;
 }
-a{color:inherit; text-decoration:none}
-button{font:inherit}
+
+/* Asegura que el viewport completo esté disponible para layouts
+   que dependen de altura completo (por ejemplo, pantallas centradas) */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Estilos principales del body:
+   - Remueve el margen por defecto
+   - Aplica el color de fondo desde el theme (var(--bg))
+   - Aplica tipografía base
+   - Activa suavizado de fuentes para mejor legibilidad */
+body {
+  margin: 0;
+  background: var(--bg);          /* color de fondo global */
+  color: var(--text);             /* color de texto global */
+  font-family: var(--font);       /* fuente definida en variables */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enlaces:
+   - Heredan el color
+   - Remueven subrayado para estilo más limpio */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Botones:
+   - Heredan tipografía para evitar inconsistencias por defecto del navegador */
+button {
+  font: inherit;
+}

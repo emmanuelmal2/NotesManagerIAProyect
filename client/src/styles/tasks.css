@@ -1,10 +1,8 @@
-/* ============================================
-   PÁGINA DE TAREAS (layout general)
-   ============================================ */
+/* Pagina de tareas */
 
 /* Contenedor principal de la página de tareas */
 .tasks-page {
-  max-width: 1180px;          /* un poco más ancho que el resto */
+  max-width: 1180px;       
   margin: 0 auto;
   padding-top: var(--space-6);
   display: flex;
@@ -34,9 +32,7 @@
   }
 }
 
-/* ============================================
-   LISTA DE TAREAS
-   ============================================ */
+/* Lista de tareas */
 
 /* Contenedor de la lista de tareas */
 .tasks-list-items {
@@ -95,10 +91,7 @@
   gap: var(--space-2);
 }
 
-/* ============================================
-   CALENDARIO (tema oscuro)
-   ============================================ */
-
+/* Calendario */
 .tasks-calendar .react-calendar {
   width: 100%;
   max-width: none;
@@ -188,9 +181,7 @@
   color: #e5e7eb;
 }
 
-/* ============================================
-   DÍAS CON TAREAS
-   ============================================ */
+/* Dias con tareas */
 
 /* Marca que el día tiene al menos una tarea */
 .tasks-calendar .has-task-day {

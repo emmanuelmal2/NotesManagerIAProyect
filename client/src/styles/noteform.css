@@ -1,91 +1,125 @@
+/* Estilos del formulario de Notas / Tareas */
+
+/* Tarjeta que envuelve el formulario */
 .noteform-card {
   padding: var(--space-6);
   margin-top: var(--space-6);
 }
 
+/* Contenedor principal del formulario:
+   - Centrado
+   - Diferencia visual según tipo (nota/tarea) */
 .noteform-wrap {
-  position:relative;
-  width:100%;
-  max-width:820px;
-  margin:0 auto;
+  position: relative;
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
 }
 
-/* tipo de acento */
-.noteform-wrap.is-note { --accent:#7c9cff; }
-.noteform-wrap.is-task { --accent:#f6b043; }
+/* Acento de color según sea nota o tarea */
+.noteform-wrap.is-note { 
+  --accent: #7c9cff;    /* azul suave */ 
+}
+.noteform-wrap.is-task { 
+  --accent: #f6b043;    /* naranja/amarillo */ 
+}
 
-/* barra arriba */
+/* Barra superior del formulario:
+   - Color definido por --accent
+   - Se dibuja con un pseudo-elemento */
 .noteform-wrap::before {
-  content:"";
-  position:absolute;
-  top:-1px; left:0; right:0;
-  height:3px;
-  background:var(--accent);
-  border-radius:3px 3px 0 0;
+  content: "";
+  position: absolute;
+  top: -1px; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
 }
 
-/* título */
+/* Título del formulario (Ej. “Crear nota”, “Editar tarea”) */
 .noteform-title {
-  margin:0 0 var(--space-4);
-  font-size:1.4rem;
-  font-weight:600;
-  display:flex;
-  align-items:center;
-  gap:8px;
+  margin: 0 0 var(--space-4);
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+
+/* Badge dentro del título */
 .noteform-title .badge {
-  padding:2px 6px;
-  font-size:12px;
-  border-radius:6px;
-  border:1px solid var(--border, #2a3444);
-  background:color-mix(in srgb, var(--accent) 18%, transparent);
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border, #2a3444);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
-/* acciones */
+/* Acciones (botones del formulario) */
 .noteform-actions {
-  display:flex;
-  gap:var(--space-3);
-  justify-content:flex-end;
-  margin-top:var(--space-4);
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  margin-top: var(--space-4);
 }
 
-/* botón primario toma el acento */
+/* Botón primario:
+   - Toma el color de acento
+   - Adaptado automáticamente por tipo */
 .noteform-wrap .btn {
-  background:var(--accent);
-  border:0;
-  color:#0a0e14;
-}
-.noteform-wrap .btn:disabled {
-  opacity:.6;
+  background: var(--accent);
+  border: 0;
+  color: #0a0e14;
 }
 
-/* borde del fieldset e inputs según acento */
+.noteform-wrap .btn:disabled {
+  opacity: .6;
+}
+
+/* Inputs / Selects / Fieldset: Adaptan color de foco al acento*/
 .noteform-wrap fieldset {
   border-color: var(--accent) !important;
 }
 
+/* Focus con acento */
 .noteform-wrap select:focus,
 .noteform-wrap .input:focus,
 .noteform-wrap textarea:focus {
   border-color: var(--accent);
-  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
-/* input date oscuro + color de icono */
+/* Input de fecha estilizado*/
 .noteform-wrap input[type="date"] {
-  background-color:#151b23;
-  color:#e6eefc;
-  border:1px solid #2a3444;
-  border-radius:10px;
-  color-scheme:dark;
+  background-color: #151b23;
+  color: #e6eefc;
+  border: 1px solid #2a3444;
+  border-radius: 10px;
+  color-scheme: dark;     /* adapta el selector al tema oscuro */
 }
+
+/* Icono del calendario:
+   - invertido para modo oscuro */
 .noteform-wrap input[type="date"]::-webkit-calendar-picker-indicator {
-  opacity:.85;
+  opacity: .85;
   filter: invert(85%) brightness(95%);
 }
+
+/* Ajuste de color del icono según tipo */
 .noteform-wrap.is-task input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(70%) sepia(90%) saturate(500%) hue-rotate(350deg) brightness(1.05);
+  filter: 
+    invert(70%) 
+    sepia(90%) 
+    saturate(500%) 
+    hue-rotate(350deg) 
+    brightness(1.05);
 }
+
 .noteform-wrap.is-note input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(72%) sepia(14%) saturate(1300%) hue-rotate(190deg) brightness(1.05);
+  filter:
+    invert(72%)
+    sepia(14%)
+    saturate(1300%)
+    hue-rotate(190deg)
+    brightness(1.05);
 }

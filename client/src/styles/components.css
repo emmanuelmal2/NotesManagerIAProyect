@@ -1,25 +1,46 @@
-/* botones */
+/* Botón base (primario) */
 .btn {
-  display:inline-flex;
+  display:inline-flex;                 /* Alinea contenido horizontal/vertical */
   align-items:center;
   justify-content:center;
-  gap:.5rem;
+  gap:.5rem;                           /* Espacio entre icono y texto */
   padding:.6rem 1rem;
   border-radius: var(--radius-sm);
   border:1px solid transparent;
-  background: var(--brand);
+  background: var(--brand);            /* Color de marca como fondo */
   color:white;
   cursor:pointer;
   transition: transform .04s ease, background .2s ease;
 }
-.btn:hover { background: var(--brand-600); }
-.btn:active { transform: translateY(1px); }
-.btn:disabled { opacity:.6; cursor:not-allowed; }
 
-.btn-outline { background: transparent; border-color: var(--border); }
-.btn-danger  { background: var(--danger); }
+/* Hover: cambia ligeramente el fondo */
+.btn:hover { 
+  background: var(--brand-600); 
+}
 
-/* inputs base */
+/* Active: efecto de “presionado” */
+.btn:active { 
+  transform: translateY(1px); 
+}
+
+/* Estado deshabilitado: opaco y sin cursor de mano */
+.btn:disabled { 
+  opacity:.6; 
+  cursor:not-allowed; 
+}
+
+/* Variante de botón con fondo transparente y borde */
+.btn-outline { 
+  background: transparent; 
+  border-color: var(--border); 
+}
+
+/* Variante de botón de peligro (eliminar, etc.) */
+.btn-danger  { 
+  background: var(--danger); 
+}
+
+/* Inputs / Textareas base */
 .input,
 .textarea {
   width:100%;
@@ -29,6 +50,8 @@
   background:#0e141b;
   color:var(--text);
 }
+
+/* Estilo de foco (focus) para inputs/textareas */
 .input:focus,
 .textarea:focus {
   border-color: var(--brand);
@@ -36,45 +59,59 @@
   outline:none;
 }
 
+/* Ajustes específicos para textarea */
 .textarea {
   min-height:120px;
-  resize:vertical;
+  resize:vertical;   /* El usuario puede cambiar la altura verticalmente */
 }
 
-/* formularios */
+/* Formularios genéricos */
+
+/* Contenedor de formulario centrado con ancho máximo */
 .form {
   width:100%;
   max-width:520px;
   margin:0 auto;
 }
 
+/* label + input/textarea */
 .field {
   display:flex;
   flex-direction:column;
   gap:.5rem;
 }
 
+/* Estilo del label en formularios genéricos */
 .field label {
   font-size:.9rem;
   font-weight:600;
   color:var(--muted);
 }
 
-/* tipografía / alerts */
+/* Tipografía / estados */
+
+/* Texto atenuado (descripciones, estados vacíos, etc.) */
 .muted {
   color: var(--muted);
 }
 
+/* errores, avisos */
 .alert {
   padding:.75rem 1rem;
   border-radius:var(--radius-sm);
   background:#1a2330;
   border:1px solid var(--border);
-  color:#ffb4b4;
+  color:#ffb4b4;     /* tono rojizo para error */
 }
-.alert.success { color:#c7ffd1; }
 
-/* stacks */
+/* Variante de alerta “éxito”  */
+.alert.success { 
+  color:#c7ffd1; 
+}
+
+/* Stack vertical */
+
+/* Utilidad para apilar elementos con gap vertical */
 .stack {
   display:flex;
   flex-direction:column;

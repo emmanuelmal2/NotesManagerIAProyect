@@ -1,16 +1,18 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+
+// Paginas 
 import Dashboard  from "./pages/Dashboard";
 import CreateNote from "./pages/CreateNote";
 import EditNote   from "./pages/EditNote";
 import Login      from "./pages/Login";
 import Register   from "./pages/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
 import TasksPage from "./pages/TaskPage";
 import CreateTask from "./pages/CreateTask";
 import Home from "./pages/Home";
 import PdfNote from "./pages/PdfNote";
 
-
+// Ruta protegida con Navbar + verificación de token
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (

@@ -1,23 +1,28 @@
-// src/pages/Dashboard.jsx
+// Página principal de notas (Dashboard)
+// Muestra todas las notas del usuario (solo type "note")
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import "../styles/dashboard.css";
 
 export default function Dashboard() {
-  const [notes, setNotes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [notes, setNotes] = useState([]);       // lista de notas
+  const [loading, setLoading] = useState(true); // estado de carga inicial
   const navigate = useNavigate();
 
+  // Carga inicial de notas al montar el componente
   useEffect(() => {
     (async () => {
       try {
         const token = localStorage.getItem("token");
+
+        // Trae solo notas (no tareas) usando el query param type=note
         const res = await axios.get("/notes", {
           headers: { Authorization: `Bearer ${token}` },
-          params: { type: "note" }, // solo notas
+          params: { type: "note" },
         });
 
+        // Ordenar por fecha de actualización (más recientes primero)
         const sorted = res.data.sort(
           (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
         );
@@ -30,47 +35,36 @@ export default function Dashboard() {
     })();
   }, []);
 
+  // Eliminar una nota por ID
   async function handleDelete(id) {
     if (!confirm("¿Borrar nota?")) return;
+
     const token = localStorage.getItem("token");
+
     await axios.delete(`/notes/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setNotes((prev) => prev.filter((n) => n._id !== id));
+
+    // Quita la nota eliminada del estado local
+    setNotes(prev => prev.filter(n => n._id !== id));
   }
 
-  // ---- PREVIEW PDF EN NUEVA PESTAÑA ----
-  async function handlePreviewPdf(note) {
-    try {
-      if (!note.file?.url) return;
-
-      const res = await fetch(note.file.url);
-      const arrayBuffer = await res.arrayBuffer();
-      const blob = new Blob([arrayBuffer], { type: "application/pdf" });
-      const blobUrl = URL.createObjectURL(blob);
-
-      window.open(blobUrl, "_blank"); // abre visor PDF del navegador
-    } catch (err) {
-      console.error("Error al previsualizar PDF:", err);
-      alert("No se pudo abrir el PDF.");
-    }
-  }
-
-  // ---- DESCARGAR PDF CON NOMBRE BONITO ----
+  // Descarga de un PDF
   async function handleDownloadPdf(note) {
     try {
       if (!note.file?.url) return;
 
       const res = await fetch(note.file.url);
       const arrayBuffer = await res.arrayBuffer();
+
       const blob = new Blob([arrayBuffer], { type: "application/pdf" });
       const blobUrl = URL.createObjectURL(blob);
 
-      // nombre sugerido para el archivo
+      // Nombre de archivo legible
       const filename =
-        (note.file.name && note.file.name.endsWith(".pdf")
+        note.file.name && note.file.name.endsWith(".pdf")
           ? note.file.name
-          : `${note.file.name || note.title || "documento"}.pdf`);
+          : `${note.file.name || note.title || "documento"}.pdf`;
 
       const a = document.createElement("a");
       a.href = blobUrl;
@@ -86,15 +80,16 @@ export default function Dashboard() {
     }
   }
 
-
   return (
     <div className="container dashboard">
+      {/* Barra de acciones del dashboard */}
       <div className="dashboard-header">
         <button className="btn" onClick={() => navigate("/new")}>
           Crear nota
         </button>
       </div>
 
+      {/* Estados de la UI: cargando / vacío / con notas */}
       {loading ? (
         <p className="muted">Cargando…</p>
       ) : notes.length === 0 ? (
@@ -103,73 +98,89 @@ export default function Dashboard() {
         </div>
       ) : (
         <section className="notes-grid">
-          {notes.map((note) => (
-            <article
-              key={note._id}
-              className="card note note-clickable"
-              onClick={() => navigate(`/edit/${note._id}`)}
-            >
-              {/* Botón de borrar flotante */}
-              <button
-                className="note-delete"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDelete(note._id);
+          {notes.map(note => {
+            const isPdf = !!note.file?.isPdf; // bandera para saber si es PDF
+
+            return (
+              <article
+                key={note._id}
+                // Solo las notas normales se marcan como "clickables"
+                className={`card note ${!isPdf ? "note-clickable" : ""}`}
+                // Click en la tarjeta → solo navega a editar si NO es PDF
+                onClick={() => {
+                  if (!isPdf) {
+                    navigate(`/edit/${note._id}`);
+                  }
                 }}
-                aria-label="Eliminar nota"
               >
-                ×
-              </button>
+                {/* Botón de borrar flotante (no debe disparar el onClick del article) */}
+                <button
+                  className="note-delete"
+                  onClick={e => {
+                    e.stopPropagation(); // evita navegar al hacer click en borrar
+                    handleDelete(note._id);
+                  }}
+                  aria-label="Eliminar nota"
+                >
+                  ×
+                </button>
 
-              <header className="note-header">
-                <div className="note-header-main">
-                  <h2 className="note-title">
-                    {note.title}
-                    {note.file?.isPdf && (
-                      <span className="badge badge--pdf">PDF</span>
-                    )}
-                  </h2>
-                  <p className="note-date">
-                    {new Date(note.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              </header>
+                {/* Encabezado de la tarjeta */}
+                <header className="note-header">
+                  <div className="note-header-main">
+                    <h2 className="note-title">
+                      {note.title}
+                      {/* Badge visual si la nota tiene un PDF asociado */}
+                      {isPdf && (
+                        <span className="badge badge--pdf">PDF</span>
+                      )}
+                    </h2>
 
-              <section className="note-body">
-                {note.file?.isPdf ? (
-                  <p className="muted">Documento PDF</p>
-                ) : (
-                  <p className="ellipsis-4">{note.content}</p>
+                    {/* Fecha de creación en formato local */}
+                    <p className="note-date">
+                      {new Date(note.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </header>
+
+                {/* Cuerpo de la nota */}
+                <section className="note-body">
+                  {isPdf ? (
+                    // Para PDFs, solo mostramos un texto genérico
+                    <p className="muted">Documento PDF</p>
+                  ) : (
+                    // Para notas normales, preview del contenido
+                    <p className="ellipsis-4">{note.content}</p>
+                  )}
+                </section>
+
+                {/* Acciones especiales para notas con PDF */}
+                {isPdf && (
+                  <footer className="note-footer">
+                    <button
+                      className="btn btn-outline btn-sm"
+                      onClick={e => {
+                        e.stopPropagation();        // solo abre visor, no edita
+                        navigate(`/pdf/${note._id}`);
+                      }}
+                    >
+                      Ver
+                    </button>
+
+                    <button
+                      className="btn btn-outline btn-sm"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleDownloadPdf(note);
+                      }}
+                    >
+                      Descargar
+                    </button>
+                  </footer>
                 )}
-              </section>
-
-          {note.file?.isPdf && (
-            <footer className="note-footer">
-              <button
-                className="btn btn-outline btn-sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/pdf/${note._id}`);
-                }}
-              >
-                Ver
-              </button>
-
-              <button
-                className="btn btn-outline btn-sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDownloadPdf(note);
-                }}
-              >
-                Descargar
-              </button>
-            </footer>
-          )}
-
-
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </section>
       )}
     </div>

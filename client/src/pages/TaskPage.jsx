@@ -1,4 +1,4 @@
-// src/pages/TaskPage.jsx
+// Página de tareas con calendario
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
@@ -7,17 +7,18 @@ import axios from "../api/axios";
 import "../styles/tasks.css";
 
 export default function TaskPage() {
-  const [tasks, setTasks] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [tasks, setTasks] = useState([]);             // todas las tareas
+  const [selectedDate, setSelectedDate] = useState(new Date()); // día seleccionado en el calendario
   const navigate = useNavigate();
 
+  // Cargar tareas desde el backend al montar el componente
   useEffect(() => {
     (async () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get("/notes", {
           headers: { Authorization: `Bearer ${token}` },
-          params: { type: "task" }, // solo tareas
+          params: { type: "task" }, // solo tareas (no notas)
         });
         setTasks(res.data);
       } catch (err) {
@@ -26,10 +27,12 @@ export default function TaskPage() {
     })();
   }, []);
 
+  // Agrupa tareas por día (clave: toDateString) para poder marcar el calendario
   const tasksByDay = useMemo(
     () =>
       tasks.reduce((acc, t) => {
-        if (!t.dueDate) return acc;
+        if (!t.dueDate) return acc; // sin fecha → no la usamos para el calendario
+
         const day = new Date(t.dueDate).toDateString();
         acc[day] = acc[day] || [];
         acc[day].push(t);
@@ -38,11 +41,12 @@ export default function TaskPage() {
     [tasks]
   );
 
-  const tasksForSelectedDay = tasks.filter((t) =>
+  // Tareas que corresponden exactamente al día seleccionado
+  const tasksForSelectedDay = tasks.filter(t =>
     t.dueDate && isSameDay(parseISO(t.dueDate), selectedDate)
   );
 
-  // --- NUEVO: marcar tarea como hecha (la borramos) ---
+  // Marcar tarea como hecha: en este caso, la eliminamos
   async function handleDone(id) {
     const ok = confirm("¿Marcar esta tarea como hecha y eliminarla?");
     if (!ok) return;
@@ -53,8 +57,8 @@ export default function TaskPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // La quitamos del estado global de tareas
-      setTasks((prev) => prev.filter((t) => t._id !== id));
+      // Actualizamos estado local quitando la tarea
+      setTasks(prev => prev.filter(t => t._id !== id));
     } catch (err) {
       console.error("Error al eliminar tarea:", err);
       alert("No se pudo eliminar la tarea.");
@@ -63,6 +67,7 @@ export default function TaskPage() {
 
   return (
     <div className="container tasks-page">
+      {/* Encabezado: título + botón para crear tarea */}
       <div className="tasks-header">
         <h2>Tareas</h2>
         <button className="btn" onClick={() => navigate("/tasks/new")}>
@@ -70,11 +75,14 @@ export default function TaskPage() {
         </button>
       </div>
 
+      {/* Layout de dos columnas: calendario / lista */}
       <div className="tasks-layout">
+        {/* Columna izquierda: calendario */}
         <div className="tasks-calendar">
           <Calendar
             value={selectedDate}
             onChange={setSelectedDate}
+            // Agrega la clase "has-task-day" a los días que tienen tareas
             tileClassName={({ date }) => {
               const key = date.toDateString();
               return tasksByDay[key] ? "has-task-day" : undefined;
@@ -82,6 +90,7 @@ export default function TaskPage() {
           />
         </div>
 
+        {/* Columna derecha: lista de tareas del día seleccionado */}
         <div className="tasks-list">
           <h3>
             {tasksForSelectedDay.length > 0
@@ -90,8 +99,10 @@ export default function TaskPage() {
           </h3>
 
           <ul className="tasks-list-items">
-            {tasksForSelectedDay.map((t) => {
+            {tasksForSelectedDay.map(t => {
+              // Clase según prioridad: low/medium/high
               const priorityClass = (t.priority || "medium").toLowerCase();
+
               return (
                 <li
                   key={t._id}
@@ -99,9 +110,11 @@ export default function TaskPage() {
                 >
                   <div className="task-item-main">
                     <strong className="task-item-title">{t.title}</strong>
+
                     <p className="muted">
                       Prioridad: {t.priority} · Estado: {t.status}
                     </p>
+
                     {t.content && (
                       <p className="task-item-body">{t.content}</p>
                     )}

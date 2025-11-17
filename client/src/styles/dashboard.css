@@ -1,18 +1,23 @@
+/* Contenedor principal del dashboard:
+   centra y limita el ancho máximo del contenido */
 .dashboard {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-
+/* Encabezado del dashboard:
+  botón "Crear nota" alineado a la derecha */
 .dashboard-header {
-
   display: flex;
   justify-content: flex-end;
   margin-bottom: var(--space-4);
 }
 
-/* Grid que aprovecha el ancho */
+/* Grid de notas:
+   - Se adapta al ancho disponible
+   - Cada tarjeta tiene un mínimo de 260px
+   - Auto-fit rellena con tantas columnas como quepan */
 .notes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -20,7 +25,9 @@
   align-items: stretch;
 }
 
-/* Tarjeta de nota */
+/* Tarjeta de nota individual:
+   - Fondo, borde, sombra y efecto hover
+   - Cursor pointer para indicar que es clickeable */
 .card.note {
   position: relative;
   padding: var(--space-4);
@@ -29,27 +36,34 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   border: 1px solid var(--border, #262b3f);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease,
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
     border-color 0.15s ease;
 }
 
+/* Efecto hover de la tarjeta */
 .card.note:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   border-color: var(--primary, #3b82f6);
 }
 
-/* Encabezado: título + fecha */
+/* Encabezado de la nota (título + fecha) */
 .note-header {
   margin-bottom: var(--space-2);
 }
 
+/* Contenedor para título y fecha, uno debajo del otro */
 .note-header-main {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
 }
 
+/* Título de la nota:
+   - Mismo renglón que el badge PDF
+   - Rompe palabras largas si es necesario */
 .note-title {
   margin: 0;
   font-size: 1rem;
@@ -60,26 +74,29 @@
   gap: 0.4rem;
 }
 
+/* Fecha de creación / actualización de la nota */
 .note-date {
   margin: 0;
   font-size: 0.8rem;
   color: var(--muted, #9ca3af);
 }
 
-/* Cuerpo de la nota */
+/* Cuerpo de la nota (texto de contenido) */
 .note-body {
   margin-top: 0.25rem;
   line-height: 1.5;
 }
 
-/* Footer (solo PDF) */
+/* Footer para acciones relacionadas al PDF (botones Ver / Descargar) */
 .note-footer {
   margin-top: var(--space-3);
   display: flex;
   gap: 0.5rem;
 }
 
-/* Botón borrar flotante */
+/* Botón de borrar flotante:
+   - Posición absoluta en la esquina superior derecha
+   - Icono "×" simple con hover rojo */
 .note-delete {
   position: absolute;
   top: 0.5rem;
@@ -99,7 +116,8 @@
   transform: scale(1.1);
 }
 
-/* Badges */
+/* Badge genérico:
+   - Píldora pequeña para estados/etiquetas */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -110,13 +128,14 @@
   letter-spacing: 0.05em;
 }
 
+/* Badge específico para notas con PDF */
 .badge--pdf {
   background: rgba(239, 68, 68, 0.15);
   color: #fca5a5;
   border: 1px solid rgba(248, 113, 113, 0.5);
 }
 
-/* Texto recortado a unas cuantas líneas */
+/* Texto truncado a 4 líneas */
 .ellipsis-4 {
   display: -webkit-box;
   -webkit-line-clamp: 4;

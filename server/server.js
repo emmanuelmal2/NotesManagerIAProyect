@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
@@ -11,7 +10,7 @@ dotenv.config();
 const mongo_url = process.env.MONGO_URL;
 const port = process.env.PORT || 5000;
 
-// Conexión Mongo con logs de error
+// Conexión a MongoDB
 try {
   await mongoose.connect(mongo_url);
   console.log("Mongo conectado");
@@ -22,8 +21,7 @@ try {
 const app = express();
 app.use(express.json());
 
-
-// ---- CORS (antes de las rutas) ----
+// ---- CORS configurado antes de las rutas ----
 const whitelist = [
   "http://localhost:5173",
   "https://notes-manager-ia-proyect.vercel.app",
@@ -31,36 +29,38 @@ const whitelist = [
 
 const corsOptions = {
   origin(origin, cb) {
+    if (!origin) return cb(null, true); // Postman / cURL
     try {
-      if (!origin) return cb(null, true); // Postman/cURL
       const host = new URL(origin).hostname;
-      const ok = whitelist.includes(origin) || host.endsWith(".vercel.app"); // previews
+      const ok =
+        whitelist.includes(origin) ||
+        host.endsWith(".vercel.app"); // soporte para preview deploys
       return ok ? cb(null, true) : cb(new Error("CORS: " + origin));
     } catch {
       return cb(new Error("CORS parse error"));
     }
   },
-  methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   optionsSuccessStatus: 204,
 };
 
-app.use(cors(corsOptions));        
+app.use(cors(corsOptions));
 
-// Log global: ver TODAS las requests que llegan
+// Log simple para cada request
 app.use((req, _res, next) => {
   console.log(new Date().toISOString(), req.method, req.path);
   next();
 });
 
-// Healthcheck para probar desde el navegador
+// Healthcheck
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
-// Rutas 
+// Rutas principales
 app.use("/api", authRoutes);
 app.use("/api", noteRoutes);
 
-// 404 explícito al final (si no coincide ninguna ruta)
+// 404 genérico
 app.use((req, res) => {
   console.warn("404 ->", req.method, req.path);
   res.status(404).json({ error: "Not found" });

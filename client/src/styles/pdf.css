@@ -1,3 +1,9 @@
+/* Estilos para la página de visualización de PDF */
+
+/* Contenedor principal:
+   - Centrado
+   - Ancho máximo cómodo para lectura
+   - Separación vertical */
 .pdf-page {
   width: min(1100px, 92vw);
   margin: 0 auto;
@@ -7,6 +13,9 @@
   gap: 16px;
 }
 
+/* Encabezado:
+   - Botón volver  |  título  |  botón descargar
+   - Distribución en fila */
 .pdf-header {
   display: flex;
   align-items: center;
@@ -14,28 +23,34 @@
   gap: 12px;
 }
 
+/* Contenedor del título centrado */
 .pdf-title-area {
   display: flex;
   align-items: center;
   gap: 8px;
   flex: 1;
-  justify-content: center;
+  justify-content: center;  /* título queda perfectamente centrado */
 }
 
+/* Estilo del nombre del documento */
 .pdf-title {
   font-weight: 600;
   font-size: 1rem;
 }
 
+/* Área del visor PDF */
+
 .pdf-frame-wrapper {
   margin-top: 8px;
   border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.08);
-  background: #020617;
-  height: calc(100vh - 140px); /* casi toda la pantalla */
+  overflow: hidden;                                   /* recorta bordes del iframe */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #020617;                                /* fondo oscuro si el PDF tarda en cargar */
+  height: calc(100vh - 140px);                        /* ocupa casi toda la pantalla visible */
 }
 
+/* Iframe del visor PDF:
+   - Se expande completamente en el contenedor */
 .pdf-frame {
   width: 100%;
   height: 100%;

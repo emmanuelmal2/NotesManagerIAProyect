@@ -1,5 +1,10 @@
-/* layout.css */
+/* Estilos globales de estructura y layout */
 
+/* Contenedor principal:
+   - Limita el ancho máximo
+   - Centra el contenido
+   - Añade padding interno
+   - box-sizing para que el padding no aumente el ancho real */
 .container {
   width: 100%;
   max-width: 1200px;        /* ancho cómodo en desktop */
@@ -8,6 +13,11 @@
   box-sizing: border-box;
 }
 
+/* Tarjetas genéricas:
+   - Fondo del panel
+   - Borde suave
+   - Sombra base
+   - Border-radius controlado por variables */
 .card {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -15,21 +25,25 @@
   box-shadow: var(--shadow);
 }
 
-
+/* Fila horizontal:
+   - Alinea elementos en un eje
+   - Útil para headers, buttons groups, etc. */
 .row {
   display: flex;
   align-items: center;
   gap: var(--space-3);
 }
 
+/* Centrado absoluto:
+   - Centra cualquier contenido vertical y horizontalmente */
 .center {
   display: grid;
   place-items: center;
 }
 
+/* Para pantallas pequeñas*/
 @media (max-width: 640px) {
   .container {
     padding: 1.5rem 1rem;
   }
 }
-
