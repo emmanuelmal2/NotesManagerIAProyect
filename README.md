@@ -5,12 +5,12 @@ Un gestor inteligente de notas y tareas con autenticación, visor de PDF y calen
 
 
 ## 🚀 Características principales 
-- 🔑 Registro e inicio de sesión de usuarios
-- 📝 Crear, editar, eliminar y organizar notas
-- 📚 Subida y visualización de archivos PDF (Cloudinary + Visor interno)
-- 📅 Módulo de tareas con calendario interactivo
-- 🎯 Prioridades y estados de notas/tareas
-- 📁 Arquitectura separada:
+- Registro e inicio de sesión de usuarios
+- Crear, editar, eliminar y organizar notas
+- Subida y visualización de archivos PDF (Cloudinary + Visor interno)
+- Módulo de tareas con calendario interactivo
+- Prioridades y estados de notas/tareas
+- Arquitectura separada:
   - client/ → Frontend (React + Vite)
   - server/ → Backend (Node + Express + MongoDB)
 
@@ -29,7 +29,7 @@ Backend
 - Cloudinary SDK
 - Multer (manejo de archivos)
 
-## 📦 Instalación en local
+## Instalación en local
 1. Clonar el repositorio:
    ```bash
    git clone https://github.com/emmanuelmal2/NotesManagerIAProyect.git
