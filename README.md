@@ -4,7 +4,7 @@ Un gestor inteligente de notas y tareas con autenticación, visor de PDF y calen
 [Demo en linea](https://notes-manager-ia-proyect.vercel.app)
 
 
-## 🚀 Características principales 
+## Características principales 
 - Registro e inicio de sesión de usuarios
 - Crear, editar, eliminar y organizar notas
 - Subida y visualización de archivos PDF (Cloudinary + Visor interno)
